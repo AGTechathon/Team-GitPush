@@ -1,134 +1,110 @@
+# Fusion Starter
 
-# 🎵 RepeatHarmony
+The Fusion Starter is a modern, production-ready template for building full-stack React applications using react-router-dom in SPA mode.
 
-AI Mental Health + Music Therapy Platform
+## Core Framework & Technologies
 
+- **React 18**
+- **React Router 6**: Powers the client-side routing
+- **TypeScript**: Type safety is built-in by default
+- **Vite**: Bundling and development server
+- **Vitest**: For testing
+- **TailwindCSS 3**: For styling
 
+## Routing System
 
+The routing system is powered by React Router 7:
 
-## Authors
+- `src/pages/Index.tsx` represents the home page.
+- Routes are defined in `src/App.tsx` using the `react-router-dom` import
+- Route files are located in the `src/pages/` directory
 
-- [@RishiAnand108](https://www.github.com/RishiAnand108)
+For example, routes can be defined with:
 
+```typescript
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-# Features
+<Routes>
+  <Route path="/" element={<Index />} />
+  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+  <Route path="*" element={<NotFound />} />
+</Routes>;
+```
 
-## 🤖 Multimodal AI Detection
-- Real-time chat sentiment analysis
-- Facial emotion recognition through computer vision
-- Voice pattern and tone aLight/dark mode toggle
-- Live previews
-- Fullscreen mode
-- Cross platform analysis
-- 95%+ accuracy with multimodal AI fusion
+## Styling System
 
-## 🎼 Personalized Music Therapy
-- Instant therapeutic music recommendations
-- Spotify and YouTube Music integration
-- AI-curated playlists based on emotional state
+The styling system combines several technologies:
 
-## 🆘 Crisis Support Integration
-- 24/7 emergency helpline access
-- Professional therapy referral system
-- Immediate crisis intervention alerts
+- **TailwindCSS 3**: Used as the primary styling method with utility classes
+- **tailwind.config.ts**: Used to describe the design system tokens, update this file to change the whole look and feel
+- **CSS Imports**: Base styles are imported in `src/index.css`
+- **UI Component Library**: A comprehensive set of pre-styled UI components in `src/components/ui/` built with:
+  - Radix UI: For accessible UI primitives
+  - Class Variance Authority: For component variants
+  - TailwindCSS: For styling
+  - Lucide React: For icons
+  - Lots of utility components, like carousels, calendar, alerts...
+- **Class Name Utility**: The codebase includes a `cn` utility function from `@/lib/utils` that combines the functionality of `clsx` and `tailwind-merge`. Here's how it's typically used:
 
-## Tech Stack
+  ```typescript
+  // A complex example showing the power of the cn utility
+  function CustomComponent(props) {
+    return (
+      <div
+        className={cn(
+          // Base styles always applied
+          "flex items-center rounded-md transition-all duration-200",
 
-**Frontend:** React.js, HTML5, CSS3, Bootstrap
+          // Object syntax for conditional classes - keys are class names, values are boolean expressions
+          {
+            // Size-based classes
+            "text-xs p-1.5 gap-1": props.size === "sm",
+            "text-base p-3.5 gap-3": props.size === "lg",
 
-**Backend:** Node.js, Express.js, MongoDB Atlas
+            // Width control
+            "w-full": isFullWidth,
+            "w-auto": !isFullWidth,
+          },
 
-**AI/ML:** Python, TensorFlow, MediaPipe, OpenCV
+          // Error state overrides other states
+          props.hasError && "border-red-500 text-red-700 bg-red-50",
 
-**APIs:** Spotify Web API, Speech Recognition API
+          // User-provided className comes last for highest precedence
+          props.className
+        )}
+      />
+    );
+  }
+  ```
 
-## Installation
+The styling system supports dark mode through CSS variables and media queries.
 
-# Clone repository
-git clone https://github.com/masoom-842155/repeatharmony.git
-cd repeatharmony
+## Testing
 
-# Install dependencies
-npm install
-cd ai-models && pip install -r requirements.txt
+- **Unit Testing Utilities**: Utility functions such as `cn` in `src/lib/utils.ts` are covered by dedicated unit tests in `src/lib/utils.spec.ts`.
+- **Testing Framework**: Tests are written using [Vitest](https://vitest.dev/), which provides a Jest-like API and fast performance for Vite projects.
+- **Adding More Tests**: Place new utility tests in the same directory as the utility, using the `.spec.ts` suffix.
 
-# Setup environment
-cp .env.example .env
+## Development Workflow
 
-# Start application
-npm start
+- **Development**: `npm run dev` - Starts the development server with HMR
+- **Production Build**: `npm run build` - Creates optimized production build
+- **Type Checking**: `npm run typecheck` - Validates TypeScript types
+- **Run tests**: `npm test` - Run all .spec tests
 
-    
-## Environment Variables
+## Architecture Overview
 
-MONGODB_URL=your_mongodb_connection_string
-SPOTIFY_CLIENT_ID=your_spotify_client_id
-SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
-FACE_API_KEY=your_face_detection_api_key
-SPEECH_API_KEY=your_speech_recognition_key
+The architecture follows a modern React application structure:
 
+```
+package.json
+app/
+├── components/     # Reusable UI components
+│   └── ui/         # Core UI component library
+├── routes/         # Route components and logic
+├── app.css         # Global styles
+├── root.tsx        # Root layout and error boundary
+└── routes.ts       # Route configuration
+```
 
-
-## Usage/Examples
-
-// Emotion Analysis
-
-const emotionData = await analyzeEmotion({
-  textInput: "I'm feeling overwhelmed",
-  facialData: webcamStream,
-  voiceData: microphoneStream
-});
-
-// Music Recommendation
-const recommendations = await getMusicTherapy({
-  emotionState: emotionData,
-  userPreferences: user.preferences
-});
-
-
-## API Reference
-
-#### Get all items
-
-Base URL: https://api.repeatharmony.com/v1
-
-POST /api/emotion/analyze
-
-Analyze multimodal emotion data
-
-Body: { textInput, faceImage, voiceClip }
-
-Returns: { emotion, confidence, intensity }
-
-#### GET /api/music/recommendations
-
-Get personalized music therapy
-
-Query: emotion, intensity, genre
-
-Returns: { playlist, songs[] }
-## Contributing
-
-Contributions are always welcome!
-
-### Fork and create feature branch
-git checkout -b feature/your-feature
-
-### Commit changes
-git commit -m 'Add amazing feature'
-
-### Push and create PR
-git push origin feature/your-feature
-
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
-
-
-## Support
-
-Contact: masoom842155@gmail.com
-Issues: Report Bug
-Discussions: Join Community
-
+This structure provides a clean separation of concerns between UI components, routes, and application logic.
