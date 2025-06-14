@@ -1,140 +1,124 @@
-# 🚀 Fusion Starter
 
-**A Modern, Production-Ready Template for Full-Stack React Apps with React Router & TypeScript**
+# 🎵 RepeatHarmony
 
-<div align="center">
-
-![Fusion Starter UI Example](https://via.placeholder.com/800x400?text=Fusion+Starter+UI+Example)
-*Replace with your project screenshot*
-
-</div>
-
----
-
-## ✨ Why Choose Fusion Starter?
-
-**Fusion Starter** is designed for developers who want a powerful, flexible, and beautiful foundation for building modern web applications.  
-With built-in **TypeScript, TailwindCSS, Radix UI, and Vite**, you get fast builds, robust typing, and gorgeous design out of the box.
-
----
-
-## 🛠️ Core Technologies
-
-| Tech            | Purpose                                 |
-|-----------------|-----------------------------------------|
-| **React 18**    | Modern UI library                       |
-| **TypeScript**  | Type safety & developer experience      |
-| **Vite**        | Blazing fast bundler & dev server       |
-| **TailwindCSS** | Utility-first CSS styling               |
-| **Vitest**      | Fast, modern test runner                |
-| **React Router**| Client-side routing                     |
-| **Radix UI**    | Accessible UI primitives                |
-| **Lucide React**| Beautiful icon set                      |
-
----
-
-## 📂 Project Structure
-
-app/
-├── components/ # Reusable UI components
-│ └── ui/ # Core UI component library
-├── routes/ # Route components and logic
-├── app.css # Global styles
-├── root.tsx # Root layout and error boundary
-└── routes.ts # Route configuration
+AI Mental Health + Music Therapy Platform
 
 
----
 
-## 🚦 Routing System
 
-**React Router 7** powers your app’s navigation.
+## Authors
 
-Define your routes in `src/App.tsx`:
+- [@RishiAnand108](https://www.github.com/RishiAnand108)
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-<Routes> <Route path="/" element={<Index />} /> {/* Add all custom routes above the catch-all "*" route */} <Route path="*" element={<NotFound />} /> </Routes> ```
+# Features
 
-🎨 Styling System
-TailwindCSS 3 is the backbone of your design.
-Customize your theme in tailwind.config.ts.
-Use utility classes for rapid UI development.
+## 🤖 Multimodal AI Detection
+- Real-time chat sentiment analysis
+- Facial emotion recognition through computer vision
+- Voice pattern and tone aLight/dark mode toggle
+- Live previews
+- Fullscreen mode
+- Cross platform analysis
+- 95%+ accuracy with multimodal AI fusion
 
-Dark mode is supported out of the box via CSS variables.
+## 🎼 Personalized Music Therapy
+- Instant therapeutic music recommendations
+- Spotify and YouTube Music integration
+- AI-curated playlists based on emotional state
 
-🖌️ UI Component Library
-<div align="center">
-UI Component Showcase
-Replace with your UI component screenshot
+## 🆘 Crisis Support Integration
+- 24/7 emergency helpline access
+- Professional therapy referral system
+- Immediate crisis intervention alerts
 
-</div>
-Radix UI: Accessible, unstyled primitives
+## Installation
 
-Lucide React: Modern icons
+# Clone repository
+git clone https://github.com/masoom-842155/repeatharmony.git
+cd repeatharmony
 
-Pre-styled components: Carousels, calendars, alerts, and more
-
-Class Name Utility (cn):
-
-text
-import { cn } from "@/lib/utils";
-
-function CustomComponent(props) {
-  return (
-    <div
-      className={cn(
-        "flex items-center rounded-md transition-all duration-200",
-        {
-          "text-xs p-1.5 gap-1": props.size === "sm",
-          "text-base p-3.5 gap-3": props.size === "lg",
-          "w-full": isFullWidth,
-          "w-auto": !isFullWidth,
-        },
-        props.hasError && "border-red-500 text-red-700 bg-red-50",
-        props.className
-      )}
-    />
-  );
-}
-🧪 Testing
-Vitest provides a fast, Jest-like testing experience.
-Write your tests in .spec.ts files next to your utilities.
-
-text
-npm test  # Run all tests
-🏗️ Development Workflow
-Command	Description
-npm run dev	Start dev server
-npm run build	Build for production
-npm run typecheck	Check TypeScript types
-npm test	Run all tests
-🖼️ UI Showcase
-<div align="center">
-Dashboard Example
-Replace with your dashboard screenshot
-
-Dark Mode Example
-Replace with your dark mode screenshot
-
-</div>
-🚀 Getting Started
-Clone the repo
-
-text
-git clone https://github.com/your-username/fusion-starter.git
-cd fusion-starter
-Install dependencies
-
-text
+# Install dependencies
 npm install
-Start developing
+cd ai-models && pip install -r requirements.txt
 
-text
-npm run dev
-📝 License
-MIT License
+# Setup environment
+cp .env.example .env
+
+# Start application
+npm start
+
+    
+## Environment Variables
+
+MONGODB_URL=your_mongodb_connection_string
+SPOTIFY_CLIENT_ID=your_spotify_client_id
+SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+FACE_API_KEY=your_face_detection_api_key
+SPEECH_API_KEY=your_speech_recognition_key
 
 
 
+## Usage/Examples
+
+// Emotion Analysis
+
+const emotionData = await analyzeEmotion({
+  textInput: "I'm feeling overwhelmed",
+  facialData: webcamStream,
+  voiceData: microphoneStream
+});
+
+// Music Recommendation
+const recommendations = await getMusicTherapy({
+  emotionState: emotionData,
+  userPreferences: user.preferences
+});
+
+
+## API Reference
+
+#### Get all items
+
+Base URL: https://api.repeatharmony.com/v1
+
+POST /api/emotion/analyze
+
+Analyze multimodal emotion data
+
+Body: { textInput, faceImage, voiceClip }
+
+Returns: { emotion, confidence, intensity }
+
+#### GET /api/music/recommendations
+
+Get personalized music therapy
+
+Query: emotion, intensity, genre
+
+Returns: { playlist, songs[] }
+## Contributing
+
+Contributions are always welcome!
+
+### Fork and create feature branch
+git checkout -b feature/your-feature
+
+### Commit changes
+git commit -m 'Add amazing feature'
+
+### Push and create PR
+git push origin feature/your-feature
+
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
+
+## Support
+
+Contact: masoom842155@gmail.com
+Issues: Report Bug
+Discussions: Join Community
 
