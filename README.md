@@ -9,6 +9,8 @@ AI Mental Health + Music Therapy Platform
 ## Authors
 
 - [@RishiAnand108](https://www.github.com/RishiAnand108)
+- [@Sumit-123singh](https://github.com/Sumit-123singh)
+- [@masoom-842155](https://github.com/masoom-842155)
 
 
 # Features
