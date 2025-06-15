@@ -37,7 +37,7 @@ AI Mental Health + Music Therapy Platform
 ## Installation
 
 # Clone repository
-git clone https://github.com/masoom-842155/repeatharmony.git
+git clone 
 cd repeatharmony
 
 # Install dependencies
