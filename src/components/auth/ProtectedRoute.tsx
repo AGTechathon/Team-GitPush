@@ -17,6 +17,7 @@ import Chatbot from "@/components/chatbot/Chatbot";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
+// Define the props for ProtectedRoute component
 interface ProtectedRouteProps {
   children: ReactNode;
   requireAuth?: boolean;
@@ -30,13 +31,17 @@ const ProtectedRoute = ({
   redirectTo = "/",
   showAuthPrompt = true,
 }: ProtectedRouteProps) => {
+  // Use auth context to check authentication status and loading state
   const { isAuthenticated, isLoading, login } = useAuth();
+  // Use location to preserve navigation state on redirect
   const location = useLocation();
+  // State for controlling login and signup modals
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
+  // Use toast for user feedback on auth actions
   const { toast } = useToast();
 
-  // Show loading spinner while checking auth
+  // Show loading spinner while checking auth status
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
@@ -48,12 +53,12 @@ const ProtectedRoute = ({
     );
   }
 
-  // If auth not required, render children
+  // If auth is not required, render children directly
   if (!requireAuth) {
     return <>{children}</>;
   }
 
-  // If authenticated, render children with chatbot
+  // If authenticated, render children and chatbot
   if (isAuthenticated) {
     return (
       <>
@@ -63,12 +68,12 @@ const ProtectedRoute = ({
     );
   }
 
-  // If not authenticated and should redirect, redirect
+  // If not authenticated and should redirect, redirect to specified path
   if (!showAuthPrompt) {
     return <Navigate to={redirectTo} state={{ from: location }} replace />;
   }
 
-  // Show authentication prompt
+  // Handle login: authenticate user and provide feedback
   const handleLogin = async (email: string, password: string) => {
     await login(email, password);
     setShowLoginModal(false);
@@ -80,6 +85,7 @@ const ProtectedRoute = ({
     }, 0);
   };
 
+  // Handle signup: authenticate user (simulated) and provide feedback
   const handleSignup = async (
     email: string,
     password: string,
@@ -95,6 +101,7 @@ const ProtectedRoute = ({
     }, 0);
   };
 
+  // List of features to showcase in the auth prompt
   const features = [
     {
       icon: Heart,
@@ -120,6 +127,7 @@ const ProtectedRoute = ({
 
   return (
     <>
+      {/* Main auth prompt UI */}
       <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
         <Card className="max-w-2xl w-full bg-slate-800 border-slate-700">
           <CardHeader className="text-center">
@@ -144,7 +152,7 @@ const ProtectedRoute = ({
           </CardHeader>
 
           <CardContent className="space-y-8">
-            {/* Features Grid */}
+            {/* Features grid to highlight app benefits */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {features.map((feature, index) => {
                 const IconComponent = feature.icon;
@@ -169,7 +177,7 @@ const ProtectedRoute = ({
               })}
             </div>
 
-            {/* Benefits */}
+            {/* Benefits section to encourage account creation */}
             <div className="bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-lg p-6 border border-blue-500/20">
               <div className="flex items-center space-x-2 mb-4">
                 <Zap className="w-5 h-5 text-yellow-400" />
@@ -197,7 +205,7 @@ const ProtectedRoute = ({
               </ul>
             </div>
 
-            {/* Action Buttons */}
+            {/* Action buttons for signup and login */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 onClick={() => setShowSignupModal(true)}
@@ -214,7 +222,7 @@ const ProtectedRoute = ({
               </Button>
             </div>
 
-            {/* Footer Note */}
+            {/* Footer note for reassurance */}
             <div className="text-center">
               <p className="text-slate-500 text-sm">
                 Free forever • No credit card required • 2-minute setup
@@ -223,7 +231,7 @@ const ProtectedRoute = ({
           </CardContent>
         </Card>
 
-        {/* Auth Modals */}
+        {/* Login and signup modals for auth actions */}
         <LoginModal
           isOpen={showLoginModal}
           onClose={() => setShowLoginModal(false)}
@@ -245,7 +253,7 @@ const ProtectedRoute = ({
         />
       </div>
 
-      {/* Chatbot for auth prompt page */}
+      {/* Chatbot for additional support on auth prompt page */}
       <Chatbot />
     </>
   );
