@@ -23,6 +23,7 @@ import {
   Star,
 } from "lucide-react";
 
+// Define the structure for a chat message
 interface ChatMessage {
   id: string;
   type: "user" | "bot";
@@ -32,20 +33,27 @@ interface ChatMessage {
 }
 
 const Chatbot = () => {
+  // State for managing chat window visibility
   const [isOpen, setIsOpen] = useState(false);
+  // State for storing chat messages
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  // State for storing user input
   const [inputValue, setInputValue] = useState("");
+  // State for indicating bot is typing
   const [isTyping, setIsTyping] = useState(false);
+  // Ref for scrolling to the latest message
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  // Toast notification hook for user feedback
   const { toast } = useToast();
+  // Auth context for personalized responses
   const { isAuthenticated, user } = useAuth();
 
-  // Scroll to bottom when new messages arrive
+  // Scroll to bottom whenever new messages are added
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Initialize with welcome message
+  // Initialize with a welcome message when chat opens for the first time
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       const welcomeMessage: ChatMessage = {
@@ -73,13 +81,13 @@ const Chatbot = () => {
     }
   }, [isOpen, isAuthenticated, user]);
 
-  // Intelligent response system
+  // Generate a bot response based on user input
   const generateResponse = (
     userInput: string,
   ): { content: string; suggestions?: string[] } => {
     const input = userInput.toLowerCase().trim();
 
-    // Greeting responses
+    // Handle greetings: personalized if authenticated, generic otherwise
     if (
       input.match(/^(hi|hello|hey|good morning|good afternoon|good evening)/)
     ) {
@@ -101,7 +109,7 @@ const Chatbot = () => {
       };
     }
 
-    // About RepeatHarmony
+    // Explain what RepeatHarmony is and its features
     if (
       input.includes("what is") ||
       input.includes("about") ||
@@ -119,7 +127,7 @@ const Chatbot = () => {
       };
     }
 
-    // Getting started
+    // Guide user on how to get started, with tailored advice for logged-in users
     if (
       input.includes("get started") ||
       input.includes("how to start") ||
@@ -150,7 +158,7 @@ const Chatbot = () => {
       }
     }
 
-    // Features
+    // Describe available features in detail
     if (
       input.includes("features") ||
       input.includes("what can") ||
@@ -168,7 +176,7 @@ const Chatbot = () => {
       };
     }
 
-    // Mood tracking
+    // Explain mood tracking and how it works, with guidance for authenticated users
     if (
       input.includes("mood") ||
       input.includes("track") ||
@@ -197,7 +205,7 @@ const Chatbot = () => {
       }
     }
 
-    // Therapy and meditation
+    // Describe therapy and meditation tools, with guidance for authenticated users
     if (
       input.includes("therapy") ||
       input.includes("meditation") ||
@@ -223,7 +231,7 @@ const Chatbot = () => {
       }
     }
 
-    // Music
+    // Explain music therapy and recommendations, with guidance for authenticated users
     if (
       input.includes("music") ||
       input.includes("sound") ||
@@ -253,7 +261,7 @@ const Chatbot = () => {
       }
     }
 
-    // Dashboard and progress
+    // Describe dashboard and analytics, with guidance for authenticated users
     if (
       input.includes("dashboard") ||
       input.includes("progress") ||
@@ -283,7 +291,7 @@ const Chatbot = () => {
       }
     }
 
-    // Community and forum
+    // Describe community and forum features, with guidance for authenticated users
     if (
       input.includes("community") ||
       input.includes("forum") ||
@@ -313,7 +321,7 @@ const Chatbot = () => {
       }
     }
 
-    // Pricing and free features
+    // Explain pricing and free features
     if (
       input.includes("free") ||
       input.includes("cost") ||
@@ -329,7 +337,7 @@ const Chatbot = () => {
       };
     }
 
-    // Privacy and security
+    // Explain privacy and security measures
     if (
       input.includes("privacy") ||
       input.includes("secure") ||
@@ -347,7 +355,7 @@ const Chatbot = () => {
       };
     }
 
-    // Help and support
+    // Offer help and support options
     if (
       input.includes("help") ||
       input.includes("support") ||
@@ -365,7 +373,7 @@ const Chatbot = () => {
       };
     }
 
-    // Fallback response with helpful suggestions
+    // Fallback response when intent is not recognized
     return {
       content:
         "I'd love to help you with that! 🤔 While I'm getting smarter every day, I might not have understood your question perfectly.\n\nHere are some things I'm great at helping with:\n• Explaining RepeatHarmony features\n• Getting you started\n• Account and privacy questions\n• Technical support\n• Connecting you with resources\n\nCould you rephrase your question, or would you like to explore one of these topics?",
@@ -378,9 +386,11 @@ const Chatbot = () => {
     };
   };
 
+  // Handle sending a message from the user
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
 
+    // Add user message to chat history
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
       type: "user",
@@ -392,9 +402,10 @@ const Chatbot = () => {
     setInputValue("");
     setIsTyping(true);
 
-    // Simulate typing delay
+    // Simulate typing delay for a more natural feel
     setTimeout(
       () => {
+        // Generate and add bot response to chat history
         const response = generateResponse(inputValue);
         const botMessage: ChatMessage = {
           id: (Date.now() + 1).toString(),
@@ -407,15 +418,17 @@ const Chatbot = () => {
         setMessages((prev) => [...prev, botMessage]);
         setIsTyping(false);
       },
-      1000 + Math.random() * 1000,
-    ); // Random delay for more natural feel
+      1000 + Math.random() * 1000, // Random delay for realism
+    );
   };
 
+  // Handle clicking a suggestion, automatically sending it as a message
   const handleSuggestionClick = (suggestion: string) => {
     setInputValue(suggestion);
     setTimeout(() => handleSendMessage(), 100);
   };
 
+  // Handle pressing Enter to send a message
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -423,6 +436,7 @@ const Chatbot = () => {
     }
   };
 
+  // Toggle chat window visibility and show welcome toast
   const toggleChat = () => {
     setIsOpen(!isOpen);
     if (!isOpen) {
@@ -469,7 +483,7 @@ const Chatbot = () => {
           </CardHeader>
 
           <CardContent className="p-0 flex flex-col h-[400px]">
-            {/* Messages */}
+            {/* Messages Area */}
             <ScrollArea className="flex-1 p-4">
               <div className="space-y-4">
                 {messages.map((message) => (
@@ -516,7 +530,7 @@ const Chatbot = () => {
                         </div>
                       </div>
 
-                      {/* Suggestions */}
+                      {/* Suggestions: quick replies from bot messages */}
                       {message.suggestions && message.type === "bot" && (
                         <div className="mt-3 ml-10 space-y-2">
                           {message.suggestions.map((suggestion, index) => (
@@ -536,7 +550,7 @@ const Chatbot = () => {
                   </div>
                 ))}
 
-                {/* Typing Indicator */}
+                {/* Typing Indicator: visual feedback when bot is responding */}
                 {isTyping && (
                   <div className="flex justify-start">
                     <div className="flex items-start space-x-2">
@@ -563,7 +577,7 @@ const Chatbot = () => {
               <div ref={messagesEndRef} />
             </ScrollArea>
 
-            {/* Input */}
+            {/* Input Area: for user to type and send messages */}
             <div className="p-4 border-t border-slate-700">
               <div className="flex space-x-2">
                 <Input
@@ -587,7 +601,7 @@ const Chatbot = () => {
         </Card>
       )}
 
-      {/* Chat Toggle Button */}
+      {/* Chat Toggle Button: opens/closes chat window */}
       <Button
         onClick={toggleChat}
         className={`w-14 h-14 rounded-full shadow-lg transition-all duration-300 ${
@@ -608,7 +622,7 @@ const Chatbot = () => {
         )}
       </Button>
 
-      {/* Floating Help Badge */}
+      {/* Floating Help Badge: visual cue to encourage engagement */}
       {!isOpen && (
         <Badge
           className="absolute -top-2 -left-2 bg-green-600 text-white animate-bounce"
