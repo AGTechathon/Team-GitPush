@@ -1,3 +1,7 @@
+// =============================================================
+// App Component: Core Application Structure and Providers
+// =============================================================
+
 // Importing notification components for user feedback
 import { Toaster } from "@/components/ui/toaster";         // Standard toast notifications
 import { Toaster as Sonner } from "@/components/ui/sonner"; // Alternative toast notifications
@@ -29,7 +33,10 @@ import NotFound from "./pages/NotFound";   // 404 Not Found page
 // Initialize React Query client for managing server state and caching
 const queryClient = new QueryClient();
 
-// Main App component that wraps the entire application with providers and routing
+/**
+ * Main App component that wraps the entire application with providers and routing.
+ * This ensures a consistent, secure, and responsive user experience across all pages.
+ */
 const App = () => (
   // Provide React Query client to the whole app for data management
   <QueryClientProvider client={queryClient}>
@@ -37,12 +44,12 @@ const App = () => (
     <TooltipProvider>
       {/* AuthProvider manages authentication state for all components */}
       <AuthProvider>
-        {/* Display toast notifications to users */}
+        {/* Display toast notifications to users for feedback and alerts */}
         <Toaster />
         <Sonner />
-        {/* BrowserRouter enables client-side routing */}
+        {/* BrowserRouter enables client-side routing and navigation */}
         <BrowserRouter>
-          {/* Routes define the navigation structure */}
+          {/* Routes define the navigation structure for the application */}
           <Routes>
             {/* Public Routes - accessible to all users, no login required */}
             <Route path="/" element={<Index />} />
