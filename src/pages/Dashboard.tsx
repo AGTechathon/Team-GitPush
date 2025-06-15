@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/95hooks/use-toast";
 import {
   Home,
   MessageSquare,
@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
+// Sidebar navigation items for easy dashboard access
 const sidebarItems = [
   { icon: Home, label: "Home", href: "/", id: "home" },
   {
@@ -41,6 +42,7 @@ const sidebarItems = [
   { icon: Users, label: "Forum", href: "/forum", id: "forum" },
 ];
 
+// Achievement badges for user engagement and motivation
 const badges = [
   {
     title: "First Insight",
@@ -100,6 +102,7 @@ const badges = [
   },
 ];
 
+// Type definition for dashboard data structure
 interface DashboardData {
   weeklyData: number[];
   happyDays: number;
@@ -110,6 +113,7 @@ interface DashboardData {
 }
 
 const Dashboard = () => {
+  // State for dashboard data, loading, and time range selection
   const [dashboardData, setDashboardData] = useState<DashboardData>({
     weeklyData: [60, 45, 70, 55, 80, 75, 65],
     happyDays: 18,
@@ -124,14 +128,15 @@ const Dashboard = () => {
     "7d" | "30d" | "90d"
   >("7d");
 
+  // Hooks for navigation, location, and user feedback
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // Simulate data refresh with loading state and feedback
   const refreshData = async () => {
     setIsRefreshing(true);
 
-    // Simulate API call
     setTimeout(() => {
       setDashboardData((prev) => ({
         ...prev,
@@ -150,6 +155,7 @@ const Dashboard = () => {
     }, 2000);
   };
 
+  // Handle badge click with toast feedback for locked/unlocked badges
   const handleBadgeClick = (badge: any) => {
     if (badge.unlocked) {
       toast({
@@ -165,6 +171,7 @@ const Dashboard = () => {
     }
   };
 
+  // Handle quick actions for navigation to key features
   const handleQuickAction = (action: string) => {
     switch (action) {
       case "record":
@@ -182,6 +189,7 @@ const Dashboard = () => {
     }
   };
 
+  // Data for different time ranges (7d, 30d, 90d)
   const timeRangeData = {
     "7d": { label: "7 Days", data: dashboardData.weeklyData },
     "30d": {
@@ -200,8 +208,10 @@ const Dashboard = () => {
     },
   };
 
+  // Current data based on selected time range
   const currentData = timeRangeData[selectedTimeRange];
 
+  // Main dashboard layout with sidebar, header, and content sections
   return (
     <div className="min-h-screen bg-slate-950 flex">
       {/* Sidebar */}
@@ -313,7 +323,6 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent>
               <div className="h-64 bg-slate-900 rounded-lg flex items-end justify-center p-6">
-                {/* Dynamic Chart */}
                 <div className="w-full flex items-end justify-between space-x-2 h-40">
                   {currentData.data
                     .slice(
