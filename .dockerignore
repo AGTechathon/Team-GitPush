@@ -1,32 +1,44 @@
+# Temporary and backup files
 *~
-*.log
-*.lock
 *.tmp
 *.tmp.*
-log.txt
 
+# Logs and lock files
+*.log
+log.txt
+*.lock
+
+# System and IDE files
 .DS_Store
+
+# Dependency and build directories
 node_modules
 **/node_modules/**
 build
-data
+dist
+service
+
+# Environment and data files
 .env
+data
 load-ids.txt
 
-dist
+# Development and testing directories
 server
 tmp
 types
-.git
-.gitignore
-dist
-service
 tests
 fixtures-pages
 fixtures-apps
 
-# Netlify
+# Git metadata (should not be ignored, but included for completeness if needed)
+.git
+.gitignore
+
+# Netlify deployment files
 .netlify
+
+# Machine learning and package-specific exclusions
 packages/ml-air/lib
 packages/ml-air/bin
 packages/ml-air/project
@@ -37,6 +49,6 @@ packages/ml-air/app/__pycache__/
 src/_tests_/dataset-comparision.csv
 packages/vcp-common/native-bridge/build
 packages/vcp-common/_tests_/dataset-ranking.csv
-node_modules/
+
+# Docker and deployment files
 Dockerfile
-.gitignore
