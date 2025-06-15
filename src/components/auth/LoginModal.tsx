@@ -1,3 +1,4 @@
+// Import React and UI components for building the login modal
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,12 @@ import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Eye, EyeOff, Mail, Lock, Heart, Github, Chrome } from "lucide-react";
 
+// Define the props for the LoginModal component
+// - isOpen: Controls modal visibility
+// - onClose: Callback to close modal
+// - onLogin: Callback for login action
+// - onSwitchToSignup: Callback to switch to signup
+// - trigger: Optional trigger for dialog
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -29,6 +36,7 @@ const LoginModal = ({
   onSwitchToSignup,
   trigger,
 }: LoginModalProps) => {
+  // State for form inputs and UI behavior
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -36,9 +44,11 @@ const LoginModal = ({
   const [rememberMe, setRememberMe] = useState(false);
   const { toast } = useToast();
 
+  // Handle login form submission
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validate required fields
     if (!email || !password) {
       setTimeout(() => {
         toast({
@@ -50,9 +60,9 @@ const LoginModal = ({
       return;
     }
 
+    // Simulate login process with loading state
     setIsLoading(true);
 
-    // Simulate login process
     setTimeout(() => {
       setIsLoading(false);
       onLogin(email, password);
@@ -69,6 +79,7 @@ const LoginModal = ({
     }, 1500);
   };
 
+  // Handle social login (Google, GitHub)
   const handleSocialLogin = (provider: string) => {
     setTimeout(() => {
       toast({
@@ -84,6 +95,7 @@ const LoginModal = ({
     }, 2000);
   };
 
+  // Main modal content with card layout, social login, and form
   const content = (
     <Card className="bg-slate-800 border-slate-700 w-full max-w-md">
       <CardHeader className="text-center">
@@ -120,6 +132,7 @@ const LoginModal = ({
           </Button>
         </div>
 
+        {/* Visual separator between social and email login */}
         <div className="relative">
           <Separator className="bg-slate-600" />
           <div className="absolute inset-0 flex items-center justify-center">
@@ -147,7 +160,6 @@ const LoginModal = ({
               />
             </div>
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="password" className="text-slate-300">
               Password
@@ -179,6 +191,7 @@ const LoginModal = ({
             </div>
           </div>
 
+          {/* Remember me and forgot password */}
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <input
@@ -210,6 +223,7 @@ const LoginModal = ({
             </Button>
           </div>
 
+          {/* Submit button */}
           <Button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white"
@@ -226,6 +240,7 @@ const LoginModal = ({
           </Button>
         </form>
 
+        {/* Signup link for new users */}
         <div className="text-center">
           <span className="text-slate-400">Don't have an account? </span>
           <Button
@@ -241,6 +256,7 @@ const LoginModal = ({
     </Card>
   );
 
+  // If a trigger is provided, render as a dialog
   if (trigger) {
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
@@ -252,6 +268,7 @@ const LoginModal = ({
     );
   }
 
+  // Otherwise, render as a full-screen modal overlay
   return isOpen ? (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <div className="w-full max-w-md">{content}</div>
