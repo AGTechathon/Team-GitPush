@@ -26,14 +26,16 @@ import {
   X,
 } from "lucide-react";
 
+// Define the props for the SignupModal component
 interface SignupModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSignup: (email: string, password: string, name: string) => void;
-  onSwitchToLogin: () => void;
-  trigger?: React.ReactNode;
+  isOpen: boolean; // Controls modal visibility
+  onClose: () => void; // Callback to close modal
+  onSignup: (email: string, password: string, name: string) => void; // Callback for signup
+  onSwitchToLogin: () => void; // Callback to switch to login
+  trigger?: React.ReactNode; // Optional trigger for dialog
 }
 
+// Main SignupModal component
 const SignupModal = ({
   isOpen,
   onClose,
@@ -41,18 +43,25 @@ const SignupModal = ({
   onSwitchToLogin,
   trigger,
 }: SignupModalProps) => {
+  // State for form data
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+  // State for showing/hiding password
   const [showPassword, setShowPassword] = useState(false);
+  // State for showing/hiding confirm password
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  // State for loading status
   const [isLoading, setIsLoading] = useState(false);
+  // State for terms agreement
   const [agreeToTerms, setAgreeToTerms] = useState(false);
+  // Toast notification hook
   const { toast } = useToast();
 
+  // Function to calculate password strength
   const passwordStrength = (password: string) => {
     let strength = 0;
     if (password.length >= 8) strength += 25;
@@ -62,6 +71,7 @@ const SignupModal = ({
     return strength;
   };
 
+  // List of password requirements and whether they are met
   const passwordRequirements = [
     { text: "At least 8 characters", met: formData.password.length >= 8 },
     { text: "One lowercase letter", met: /[a-z]/.test(formData.password) },
@@ -69,13 +79,16 @@ const SignupModal = ({
     { text: "One number", met: /[0-9]/.test(formData.password) },
   ];
 
+  // Handle input field changes
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  // Handle signup form submission
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validate required fields
     if (
       !formData.name ||
       !formData.email ||
@@ -92,6 +105,7 @@ const SignupModal = ({
       return;
     }
 
+    // Validate password match
     if (formData.password !== formData.confirmPassword) {
       setTimeout(() => {
         toast({
@@ -103,6 +117,7 @@ const SignupModal = ({
       return;
     }
 
+    // Validate password strength
     if (passwordStrength(formData.password) < 75) {
       setTimeout(() => {
         toast({
@@ -114,6 +129,7 @@ const SignupModal = ({
       return;
     }
 
+    // Validate terms agreement
     if (!agreeToTerms) {
       setTimeout(() => {
         toast({
@@ -125,15 +141,20 @@ const SignupModal = ({
       return;
     }
 
+    // Start loading
     setIsLoading(true);
 
-    // Simulate signup process
+    // Simulate signup process with delay
     setTimeout(() => {
       setIsLoading(false);
+      // Call parent signup handler with form data
       onSignup(formData.email, formData.password, formData.name);
+      // Reset form
       setFormData({ name: "", email: "", password: "", confirmPassword: "" });
+      // Close modal
       onClose();
 
+      // Show success toast
       setTimeout(() => {
         toast({
           title: "Welcome to RepeatHarmony!",
@@ -143,6 +164,7 @@ const SignupModal = ({
     }, 2000);
   };
 
+  // Handle social signup (Google, GitHub)
   const handleSocialSignup = (provider: string) => {
     setTimeout(() => {
       toast({
@@ -151,7 +173,7 @@ const SignupModal = ({
       });
     }, 0);
 
-    // Simulate social signup
+    // Simulate social signup with delay
     setTimeout(() => {
       onSignup(
         `user@${provider.toLowerCase()}.com`,
@@ -162,6 +184,7 @@ const SignupModal = ({
     }, 2000);
   };
 
+  // Calculate password strength and color/text for UI
   const strength = passwordStrength(formData.password);
   const strengthColor =
     strength < 25
@@ -180,6 +203,7 @@ const SignupModal = ({
           ? "Good"
           : "Strong";
 
+  // Main modal content JSX
   const content = (
     <Card className="bg-slate-800 border-slate-700 w-full max-w-md">
       <CardHeader className="text-center">
@@ -262,7 +286,6 @@ const SignupModal = ({
               />
             </div>
           </div>
-
           <div className="space-y-2">
             <Label htmlFor="password" className="text-slate-300">
               Password
@@ -417,6 +440,7 @@ const SignupModal = ({
     </Card>
   );
 
+  // If a trigger is provided, render the modal as a dialog
   if (trigger) {
     return (
       <Dialog open={isOpen} onOpenChange={onClose}>
@@ -428,6 +452,7 @@ const SignupModal = ({
     );
   }
 
+  // Otherwise, render a full-screen modal overlay
   return isOpen ? (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <div className="w-full max-w-md">{content}</div>
