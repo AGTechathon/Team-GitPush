@@ -1,24 +1,28 @@
--- First, let's clean up any existing setup
+-- =============================================================
+-- RepeatHarmony Authentication & Profile Management Setup
+-- =============================================================
+
+-- 1. Cleanup: Remove any existing profile-related objects to avoid conflicts
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 DROP FUNCTION IF EXISTS public.handle_new_user() CASCADE;
 DROP TABLE IF EXISTS public.profiles CASCADE;
 
--- Create the profiles table with proper structure
+-- 2. Create the profiles table: Stores user profile data with proper constraints
 CREATE TABLE public.profiles (
   id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  email TEXT NOT NULL,
-  name TEXT NOT NULL,
-  initials TEXT NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  email TEXT NOT NULL,                  -- User's email, must be unique
+  name TEXT NOT NULL,                   -- User's display name
+  initials TEXT NOT NULL,               -- User's initials for avatars, etc.
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),   -- Record creation time
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),   -- Last update time
   CONSTRAINT profiles_pkey PRIMARY KEY (id),
   CONSTRAINT profiles_email_key UNIQUE (email)
 );
 
--- Enable Row Level Security
+-- 3. Enable Row Level Security (RLS) for fine-grained access control
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
--- Create comprehensive RLS policies
+-- 4. Define RLS policies: Restrict access so users can only manage their own profiles
 CREATE POLICY "Users can view own profile" 
 ON public.profiles FOR SELECT 
 TO authenticated 
@@ -35,7 +39,8 @@ TO authenticated
 USING (auth.uid() = id) 
 WITH CHECK (auth.uid() = id);
 
--- Create function to handle new user registration
+-- 5. Create a function to automatically handle new user registration
+--    Extracts name from metadata or email, generates initials, and creates a profile
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -49,10 +54,10 @@ BEGIN
     split_part(NEW.email, '@', 1)
   );
   
-  -- Generate initials
+  -- Generate initials from the name
   user_initials := UPPER(LEFT(user_name, 2));
   
-  -- Insert the profile
+  -- Insert the new profile
   INSERT INTO public.profiles (id, email, name, initials, created_at, updated_at)
   VALUES (
     NEW.id,
@@ -66,19 +71,19 @@ BEGIN
   RETURN NEW;
 EXCEPTION
   WHEN OTHERS THEN
-    -- Log error but don't fail the user creation
+    -- Log error but do not fail user creation
     RAISE LOG 'Error creating profile for user %: %', NEW.id, SQLERRM;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Create trigger for automatic profile creation
+-- 6. Create a trigger to automatically call handle_new_user after user registration
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW
   EXECUTE FUNCTION public.handle_new_user();
 
--- Create function to update profile timestamp
+-- 7. Create a function to update the profile timestamp on any change
 CREATE OR REPLACE FUNCTION public.handle_profile_updated()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -87,13 +92,14 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Create trigger for timestamp updates
+-- 8. Create a trigger to update the timestamp whenever a profile is modified
 CREATE TRIGGER on_profile_updated
   BEFORE UPDATE ON public.profiles
   FOR EACH ROW
   EXECUTE FUNCTION public.handle_profile_updated();
 
--- Verify the setup
+-- 9. Verification block: Checks if setup was successful
+--    Reports status of table, trigger, and RLS policies
 DO $$
 DECLARE
   table_exists BOOLEAN;
@@ -132,7 +138,7 @@ BEGIN
   END IF;
 END $$;
 
--- Final success message
+-- 10. Final success message
 SELECT 
   '🎉 Database setup complete! Test authentication now.' as status,
   'Check Table Editor > profiles to see the new table' as next_step;
