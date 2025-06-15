@@ -1,3 +1,7 @@
+// =============================================================
+// AuthContext: User Authentication State Management
+// =============================================================
+
 import {
   createContext,
   useContext,
@@ -6,6 +10,7 @@ import {
   ReactNode,
 } from "react";
 
+// Define user data interface
 interface User {
   id: string;
   name: string;
@@ -14,6 +19,7 @@ interface User {
   joinedAt: string;
 }
 
+// Define authentication context type for type safety
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
@@ -22,8 +28,10 @@ interface AuthContextType {
   isLoading: boolean;
 }
 
+// Create context with initial undefined value for type safety
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Custom hook to access authentication context
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
@@ -32,15 +40,17 @@ export function useAuth() {
   return context;
 }
 
+// AuthProvider props interface
 interface AuthProviderProps {
   children: ReactNode;
 }
 
+// AuthProvider component to manage authentication state and provide it to children
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Check for existing auth on mount
+  // On mount, check for existing user data in localStorage
   useEffect(() => {
     const checkAuth = () => {
       try {
@@ -60,6 +70,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     checkAuth();
   }, []);
 
+  // Login function to authenticate user and store data in localStorage
   const login = async (email: string, password: string, name?: string) => {
     setIsLoading(true);
 
@@ -75,12 +86,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
         .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
         .join(" ");
 
+    // Generate initials from display name
     const initials = displayName
       .split(" ")
       .map((part) => part.charAt(0))
       .join("")
       .substring(0, 2);
 
+    // Create user data object
     const userData: User = {
       id: Date.now().toString(),
       name: displayName,
@@ -89,17 +102,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
       joinedAt: new Date().toISOString(),
     };
 
-    // Store user data
+    // Store user data in localStorage
     localStorage.setItem("repeatharmony_user", JSON.stringify(userData));
     setUser(userData);
     setIsLoading(false);
   };
 
+  // Logout function to clear user data from localStorage and state
   const logout = () => {
     localStorage.removeItem("repeatharmony_user");
     setUser(null);
   };
 
+  // Provide authentication context to children
   const value: AuthContextType = {
     user,
     isAuthenticated: !!user,
