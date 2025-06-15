@@ -1,32 +1,53 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/contexts/AuthContext";
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import Index from "./pages/Index";
-import MoodMusic from "./pages/MoodMusic";
-import MoodInput from "./pages/MoodInput";
-import Dashboard from "./pages/Dashboard";
-import Therapy from "./pages/Therapy";
-import Forum from "./pages/Forum";
-import NotFound from "./pages/NotFound";
+// Importing notification components for user feedback
+import { Toaster } from "@/components/ui/toaster";         // Standard toast notifications
+import { Toaster as Sonner } from "@/components/ui/sonner"; // Alternative toast notifications
 
+// Tooltip provider for tooltips across the app UI
+import { TooltipProvider } from "@/components/ui/tooltip";
+
+// React Query for data fetching and caching
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+// React Router for client-side routing and navigation
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+// AuthProvider to manage user authentication state
+import { AuthProvider } from "@/contexts/AuthContext";
+
+// ProtectedRoute component for guarding authenticated-only routes
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+
+// Importing page components
+import Index from "./pages/Index";         // Public home page
+import MoodMusic from "./pages/MoodMusic"; // Mood-based music recommendations (protected)
+import MoodInput from "./pages/MoodInput"; // Mood input form (protected)
+import Dashboard from "./pages/Dashboard"; // User dashboard (protected)
+import Therapy from "./pages/Therapy";     // Therapy resources (protected)
+import Forum from "./pages/Forum";         // Community forum (protected)
+import NotFound from "./pages/NotFound";   // 404 Not Found page
+
+// Initialize React Query client for managing server state and caching
 const queryClient = new QueryClient();
 
+// Main App component that wraps the entire application with providers and routing
 const App = () => (
+  // Provide React Query client to the whole app for data management
   <QueryClientProvider client={queryClient}>
+    {/* TooltipProvider enables tooltips throughout the application */}
     <TooltipProvider>
+      {/* AuthProvider manages authentication state for all components */}
       <AuthProvider>
+        {/* Display toast notifications to users */}
         <Toaster />
         <Sonner />
+        {/* BrowserRouter enables client-side routing */}
         <BrowserRouter>
+          {/* Routes define the navigation structure */}
           <Routes>
-            {/* Public Routes */}
+            {/* Public Routes - accessible to all users, no login required */}
             <Route path="/" element={<Index />} />
 
-            {/* Protected Routes - Require Authentication */}
+            {/* Protected Routes - accessible only to authenticated users */}
             <Route
               path="/mood-music"
               element={
@@ -68,7 +89,7 @@ const App = () => (
               }
             />
 
-            {/* Catch-all route */}
+            {/* Catch-all route for undefined paths - shows 404 Not Found page */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
