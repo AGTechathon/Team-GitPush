@@ -12,22 +12,21 @@ import FooterSection from "@/components/sections/FooterSection";
 import Chatbot from "@/components/chatbot/Chatbot";
 
 const Index = () => {
+  // State and hooks for authentication, navigation, and user feedback
   const [isLoading, setIsLoading] = useState(false);
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // Handle user action: redirect or prompt for authentication
   const handleGetStarted = async () => {
     if (isAuthenticated) {
-      // User is logged in, redirect to mood input
       navigate("/mood-input");
       return;
     }
 
-    // User is not logged in, show sign up prompt
     setIsLoading(true);
 
-    // Simulate loading
     setTimeout(() => {
       setIsLoading(false);
       setTimeout(() => {
@@ -40,8 +39,8 @@ const Index = () => {
     }, 1000);
   };
 
+  // Smoothly scroll to features section and provide feedback
   const handleLearnMore = () => {
-    // Smooth scroll to features section
     const featuresSection = document.getElementById("features");
     if (featuresSection) {
       featuresSection.scrollIntoView({ behavior: "smooth" });
@@ -56,6 +55,7 @@ const Index = () => {
     }, 0);
   };
 
+  // Handle feature exploration, redirecting authenticated users or showing prompt
   const handleFeatureExplore = (featureType: string) => {
     if (!isAuthenticated) {
       setTimeout(() => {
@@ -93,6 +93,7 @@ const Index = () => {
     }, 0);
   };
 
+  // Handle dashboard view, redirecting authenticated users or showing prompt
   const handleDashboardView = () => {
     if (!isAuthenticated) {
       setTimeout(() => {
@@ -114,6 +115,7 @@ const Index = () => {
     }, 0);
   };
 
+  // Handle newsletter signup and provide feedback
   const handleNewsletterSignup = (email: string) => {
     if (email) {
       setTimeout(() => {
@@ -127,6 +129,7 @@ const Index = () => {
     return false;
   };
 
+  // Handle testimonial click and provide feedback
   const handleTestimonialClick = (author: string) => {
     setTimeout(() => {
       toast({
@@ -136,6 +139,7 @@ const Index = () => {
     }, 0);
   };
 
+  // Main page layout with all sections and AI-powered chatbot
   return (
     <div className="min-h-screen bg-slate-950">
       <HeaderSection />
@@ -149,8 +153,6 @@ const Index = () => {
       <TestimonialsSection onTestimonialClick={handleTestimonialClick} />
       <CtaSection onGetStarted={handleGetStarted} isLoading={isLoading} />
       <FooterSection onNewsletterSignup={handleNewsletterSignup} />
-
-      {/* AI-Powered Chatbot */}
       <Chatbot />
     </div>
   );
