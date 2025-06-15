@@ -3,14 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check, ArrowRight, Users, Award, Shield } from "lucide-react";
 
+// Define the props interface for CtaSection
 interface CtaSectionProps {
-  onGetStarted: () => void;
-  isLoading?: boolean;
+  onGetStarted: () => void; // Callback for "Get Started" button
+  isLoading?: boolean;       // Loading state for button
 }
 
 const CtaSection = ({ onGetStarted, isLoading = false }: CtaSectionProps) => {
+  // State for hover effect on features
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
 
+  // List of key features to highlight
   const features = [
     "Free forever plan available",
     "No credit card required",
@@ -18,6 +21,7 @@ const CtaSection = ({ onGetStarted, isLoading = false }: CtaSectionProps) => {
     "Cancel anytime",
   ];
 
+  // List of benefits with icons, titles, and descriptions
   const benefits = [
     {
       icon: Users,
@@ -38,7 +42,7 @@ const CtaSection = ({ onGetStarted, isLoading = false }: CtaSectionProps) => {
 
   return (
     <section className="py-24 px-6 bg-gradient-to-r from-blue-900 via-purple-900 to-slate-900 relative overflow-hidden">
-      {/* Background decoration */}
+      {/* Background decoration: animated gradient circles for visual appeal */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500 rounded-full blur-3xl animate-pulse"></div>
         <div
@@ -48,7 +52,7 @@ const CtaSection = ({ onGetStarted, isLoading = false }: CtaSectionProps) => {
       </div>
 
       <div className="max-w-6xl mx-auto text-center relative z-10">
-        {/* Header */}
+        {/* Header section with badge, headline, and subheading */}
         <div className="mb-12">
           <Badge
             variant="secondary"
@@ -72,7 +76,7 @@ const CtaSection = ({ onGetStarted, isLoading = false }: CtaSectionProps) => {
           </p>
         </div>
 
-        {/* Main CTA Button */}
+        {/* Main CTA Button: Triggers account setup or shows loading state */}
         <div className="mb-12">
           <Button
             size="lg"
@@ -94,7 +98,7 @@ const CtaSection = ({ onGetStarted, isLoading = false }: CtaSectionProps) => {
           </Button>
         </div>
 
-        {/* Features List */}
+        {/* Features List: Interactive list of key selling points */}
         <div className="mb-16">
           <div className="flex flex-wrap justify-center gap-6 text-blue-200">
             {features.map((feature, index) => (
@@ -113,7 +117,7 @@ const CtaSection = ({ onGetStarted, isLoading = false }: CtaSectionProps) => {
           </div>
         </div>
 
-        {/* Benefits Grid */}
+        {/* Benefits Grid: Visual cards highlighting main benefits */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {benefits.map((benefit, index) => {
             const IconComponent = benefit.icon;
@@ -134,7 +138,7 @@ const CtaSection = ({ onGetStarted, isLoading = false }: CtaSectionProps) => {
           })}
         </div>
 
-        {/* Social Proof */}
+        {/* Social Proof: Trust indicators from reputable organizations */}
         <div className="text-center">
           <p className="text-blue-200 mb-4">
             Trusted by mental health professionals worldwide
@@ -158,7 +162,7 @@ const CtaSection = ({ onGetStarted, isLoading = false }: CtaSectionProps) => {
           </div>
         </div>
 
-        {/* Bottom disclaimer */}
+        {/* Bottom disclaimer: Important legal and health information */}
         <div className="mt-16 pt-8 border-t border-white/20">
           <p className="text-sm text-blue-200 opacity-80 max-w-2xl mx-auto">
             RepeatHarmony is designed to support your mental wellness journey.
@@ -169,7 +173,7 @@ const CtaSection = ({ onGetStarted, isLoading = false }: CtaSectionProps) => {
         </div>
       </div>
 
-      {/* Floating elements */}
+      {/* Floating elements: Decorative dots for visual interest */}
       <div
         className="absolute top-20 left-20 w-4 h-4 bg-white/20 rounded-full animate-bounce"
         style={{ animationDelay: "0s" }}
